@@ -58,9 +58,17 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def setHead[A](l: List[A], h: A): List[A] = ???
 
-  def drop[A](l: List[A], n: Int): List[A] = ???
+  @annotation.tailrec
+  def drop[A](l: List[A], n: Int): List[A] = 
+    if (n <= 0) l
+    else drop(tail(l), n - 1)
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = ???
+  @annotation.tailrec
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] =  
+    l match {
+      case Cons(x, xs) => if (f(x)) dropWhile(xs, f) else l
+      case Nil => Nil
+    }
 
   def init[A](l: List[A]): List[A] = ???
 
