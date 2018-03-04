@@ -79,7 +79,8 @@ object List { // `List` companion object. Contains functions for creating and wo
       
     }
 
-  def length[A](l: List[A]): Int = ???
+  def length[A](l: List[A]): Int = 
+    foldRight(l, 0)((_, acc) => acc + 1)
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
 
