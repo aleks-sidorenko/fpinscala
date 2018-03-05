@@ -71,7 +71,6 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(_, Nil) => Nil
       case Cons(x, xs) => Cons(x, init(xs))
       case Nil => Nil
-      
     }
 
   def length[A](l: List[A]): Int = 
@@ -83,6 +82,11 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(h, t) => foldLeft(t, f(z, h))(f)
       case Nil => z
     }
+
+  def reverse[A](l: List[A]): List[A] = 
+    foldLeft[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
+    
+
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
