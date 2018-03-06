@@ -83,9 +83,22 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Nil => z
     }
 
+  def foldLeft2[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    type B2B = (B => B)
+    val identity: B2B = (b: B) => b
+    val g: (A, B2B) => B2B = (x, acc) => (b: B) => acc(f(b, x))
+    val b2b = foldRight[A, B2B](l, identity) { case (x, acc) => 
+      g(x, acc)
+    }
+
+    b2b(z)
+  }
+
+def reverse2[A](l: List[A]): List[A] = 
+    foldLeft2[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
+
   def reverse[A](l: List[A]): List[A] = 
     foldLeft[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
-    
 
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
