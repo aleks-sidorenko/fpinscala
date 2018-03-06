@@ -127,4 +127,10 @@ object List { // `List` companion object. Contains functions for creating and wo
     flatMap(l) { x: A => if (predicate(x)) List(x) else Nil }
 
   def flatMap[A](l: List[A])(f: A => List[A]): List[A] = flatten(map(l)(f))
+
+  def combine[A](l1: List[A], l2: List[A])(f: (A, A) => A): List[A] =
+    (l1, l2) match {
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), combine(t1, t2)(f))
+      case _ => Nil
+    }
 }
