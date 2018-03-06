@@ -133,4 +133,17 @@ object List { // `List` companion object. Contains functions for creating and wo
       case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), combine(t1, t2)(f))
       case _ => Nil
     }
+
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = {
+
+    def go(l1: List[A], l2: List[A], isSubsequence: Boolean): Boolean = {
+      (l1, l2) match {
+        case (Cons(h1, t1), Cons(h2, t2)) =>  if (h1 == h2) go(t1, t2, true) else go(t1, sub, false)
+        case (_, Nil) => isSubsequence
+        case (_, _) => false
+      } 
+    }
+
+    go(l, sub, false)
+  }
 }
