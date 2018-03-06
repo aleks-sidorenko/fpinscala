@@ -109,11 +109,7 @@ object List { // `List` companion object. Contains functions for creating and wo
   def reverse[A](l: List[A]): List[A] = 
     foldLeft[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
   
-  def add1(l: List[Int]): List[Int] = 
-    l match {
-      case Nil => Nil
-      case Cons(h, t) => Cons(h + 1, add1(t))
-    }
+  def add1(l: List[Int]): List[Int] = map(l)(_ + 1)
 
   def doubleToString(l: List[Double]): List[String] = 
     l match {
@@ -121,5 +117,6 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(h, t) => Cons(h.toString, doubleToString(t))
     }
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = ???
+  def map[A,B](l: List[A])(f: A => B): List[B] = 
+    foldRight(l, Nil: List[B]) { case (x, acc) => Cons(f(x), acc) }
 }
