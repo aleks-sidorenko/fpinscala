@@ -103,12 +103,17 @@ object List { // `List` companion object. Contains functions for creating and wo
     b2b(z)
   }
 
-def reverse2[A](l: List[A]): List[A] = 
+  def reverse2[A](l: List[A]): List[A] = 
     foldLeft2[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
 
   def reverse[A](l: List[A]): List[A] = 
     foldLeft[A, List[A]](l, Nil) { case (acc, x) => Cons(x, acc) }
-
+  
+  def add1(l: List[Int]): List[Int] = 
+    l match {
+      case Nil => Nil
+      case Cons(h, t) => Cons(h + 1, add1(t))
+    }
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
