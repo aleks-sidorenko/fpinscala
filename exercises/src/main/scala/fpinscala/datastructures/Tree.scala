@@ -16,4 +16,15 @@ object Tree {
       }
   }
 
+  def maximum(tree: Tree[Int]): Int = {
+    def go(tree: Tree[Int], max: Int): Int = 
+      tree match {
+          case null => max
+          case Leaf(v: Int) => math.max(max, v)
+          case Branch(l, r) => math.max(go(l, max), go(r, max))
+        }
+    
+    go(tree, 0)
+  }
+
 }
