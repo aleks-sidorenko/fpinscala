@@ -25,8 +25,8 @@ object Tree {
     go(tree, 0)
   }
 
-  def depth(tree: Tree[Int]): Int = {
-    def go(tree: Tree[Int], acc: Int): Int =
+  def depth[A](tree: Tree[A]): Int = {
+    def go(tree: Tree[_], acc: Int): Int =
       tree match {
         case null         => acc
         case Leaf(_)      => acc + 1
@@ -35,5 +35,12 @@ object Tree {
 
     go(tree, 0)
   }
+
+  def map[A, B](tree: Tree[A])(f: (A => B)): Tree[B] =
+    tree match {
+      case null         => null
+      case Leaf(v)      => Leaf(f(v))
+      case Branch(l, r) => Branch(map(l)(f), map(r)(f))
+    }
 
 }
