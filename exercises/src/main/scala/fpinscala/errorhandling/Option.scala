@@ -63,10 +63,11 @@ object Option {
     } yield f(av, bv)
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] =
-    a.foldRight[Option[List[A]]](Some(Nil)) {
-      case (x, acc) =>
-        map2(x, acc) { case (a, b) => a :: b }
-    }
+    traverse(a)(identity)
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = 
+    a.foldRight[Option[List[B]]](Some(Nil)) {
+      case (x, acc) =>
+        map2(f(x), acc) { case (a, b) => a :: b }
+    }
 }
