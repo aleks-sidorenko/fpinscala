@@ -4,12 +4,13 @@ package fpinscala.errorhandling
 import scala.{Option => _, Either => _, Left => _, Right => _, _} // hide std library `Option` and `Either`, since we are writing our own in this chapter
 
 sealed trait Either[+E,+A] {
- def map[B](f: A => B): Either[E, B] = this match {
-   case Right(v) => Right(f(v))
+ def map[B](f: A => B): Either[E, B] = 
+  flatMap(a => Right(f(a)))
+
+ def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = this match {
+   case Right(v) => f(v)
    case Left(e) => Left(e)
  }
-
- def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = ???
 
  def orElse[EE >: E, B >: A](b: => Either[EE, B]): Either[EE, B] = ???
 
