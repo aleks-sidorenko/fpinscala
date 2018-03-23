@@ -22,21 +22,26 @@ sealed trait Either[+E, +A] {
     case _       => this
   }
 
-  def map2[EE >: E, B, C](b: Either[EE, B])(
-      f: (A, B) => C): Either[EE, C] = 
-      for {
-        av <- this
-        bv <- b
-      } yield f(av, bv)
+  def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] =
+    for {
+      av <- this
+      bv <- b
+    } yield f(av, bv)
 }
 case class Left[+E](get: E) extends Either[E, Nothing]
 case class Right[+A](get: A) extends Either[Nothing, A]
 
 object Either {
   def traverse[E, A, B](es: List[A])(f: A => Either[E, B]): Either[E, List[B]] =
-    ???
+    es.foldRight[Either[E, List[B]]](Right(Nil)) {
+      case (e, acc) =>
+        f(e).map2(acc) { (x, xs) =>
+          x :: xs
+        }
+    }
 
-  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] = ???
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] =
+    traverse(es)(identity)
 
   def mean(xs: IndexedSeq[Double]): Either[String, Double] =
     if (xs.isEmpty)
