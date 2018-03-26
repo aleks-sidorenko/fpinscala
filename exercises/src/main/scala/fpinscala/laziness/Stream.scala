@@ -3,9 +3,16 @@ package fpinscala.laziness
 import Stream._
 trait Stream[+A] {
 
+  def toList: List[A] = {
+    this match {
+      case Cons(h, t) => h() :: t().toList
+      case _ => Nil
+    }
+  }
+
   def foldRight[B](z: => B)(f: (A, => B) => B): B = // The arrow `=>` in front of the argument type `B` means that the function `f` takes its second argument by name and may choose not to evaluate it.
     this match {
-      case Cons(h,t) => f(h(), t().foldRight(z)(f)) // If `f` doesn't evaluate its second argument, the recursion never occurs.
+      case Cons(h, t) => f(h(), t().foldRight(z)(f)) // If `f` doesn't evaluate its second argument, the recursion never occurs.
       case _ => z
     }
 
