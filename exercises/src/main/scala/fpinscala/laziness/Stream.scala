@@ -43,10 +43,10 @@ trait Stream[+A] {
         case Empty      => empty
       }
 
-  def takeWhile(p: A => Boolean): Stream[A] = this match {
-    case Cons(h, t) if p(h()) => Cons(h, () => t().takeWhile(p))
-    case _                    => empty
-  }
+  def takeWhile(p: A => Boolean): Stream[A] =
+    foldRight[Stream[A]](empty) {
+      case (a, b) => if (!p(a)) empty else cons(a, b)
+    }
 
   def forAll(p: A => Boolean): Boolean =
     foldRight(true)((a, acc) => acc && p(a))
