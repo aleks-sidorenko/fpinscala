@@ -103,11 +103,7 @@ object Stream {
 
   def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
-  def fib: Stream[Int] = {
-    def loop(p: Int, c: Int): Stream[Int] = cons(c, loop(c, p + c))
-    loop(0, 1)
-  }
-    
+  def fib: Stream[Int] = unfold((0, 1)) { case (p, c) => Some((c + p), (c, c + p))}
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
     def loop(s: S): Stream[A] = f(s) match {
