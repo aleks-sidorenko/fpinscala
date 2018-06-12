@@ -101,7 +101,7 @@ object Stream {
 
   def constant[A](a: A) : Stream[A] = cons(a, constant(a))
 
-  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
+  def from(n: Int): Stream[Int] = unfold(n) { case i => Some((i, i + 1))}
 
   def fib: Stream[Int] = unfold((0, 1)) { case (p, c) => Some((c + p), (c, c + p))}
 
