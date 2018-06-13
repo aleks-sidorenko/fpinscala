@@ -61,10 +61,10 @@ trait Stream[+A] {
       case (a, b) => if (p(a)) cons(a, b) else b
     }
 
-  def map[B](f: A => B): Stream[B] =
-    foldRight[Stream[B]](empty) {
-      case (a, b) => cons(f(a), b)
-    }
+  def map[B](f: A => B): Stream[B] = unfold(this) { 
+    case Cons(h, t) => Some(f(h())-> t())
+    case Empty => None
+  }
 
   def append[A1 >: A](s: Stream[A1]): Stream[A1] =
     foldRight[Stream[A1]](s) {
