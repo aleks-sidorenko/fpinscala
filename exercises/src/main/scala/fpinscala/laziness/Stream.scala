@@ -72,6 +72,18 @@ trait Stream[+A] {
       case (a, b) => f(a).append(b)
     }
 
+  def zip[B](s2: Stream[B]): Stream[(A,B)] = unfold(this -> s2) {
+    case (Cons(t1, h1), Cons(t2, h2)) => Some((t1() -> t2(), h1() -> h2()))
+    case _ => None
+  }
+
+  def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] = unfold(this -> s2) {
+    case (Cons(t1, h1), Cons(t2, h2)) => Some((Some(t1()) -> Some(t2()), h1() -> h2()))
+    case (Cons(t1, h1), Empty) => Some((Some(t1()) -> None, h1() -> Empty))
+    case (Empty, Cons(t2, h2)) => Some((None -> Some(t2()), Empty -> h2()))
+    case _ => None
+  }
+
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
   // writing your own function signatures.
 
@@ -108,4 +120,6 @@ object Stream {
     }
     loop(z)
   }
+
+  
 }
