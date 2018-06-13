@@ -26,13 +26,9 @@ trait Stream[+A] {
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
 
-  def take(n: Int): Stream[A] = {
-    if (n == 0) empty
-    else
-      this match {
-        case Cons(h, t) => Cons(h, () => t().take(n - 1))
-        case Empty      => empty
-      }
+  def take(n: Int): Stream[A] = unfold(n -> this) {
+    case (i, Cons(t, h)) if i > 0 => Some(t(), (i - 1, h()))
+    case (0, _) | (_, Empty) => None 
   }
 
   def drop(n: Int): Stream[A] =
