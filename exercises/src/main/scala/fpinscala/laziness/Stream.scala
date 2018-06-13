@@ -87,7 +87,16 @@ trait Stream[+A] {
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
   // writing your own function signatures.
 
-  def startsWith[B](s: Stream[B]): Boolean = ???
+  def startsWith[B](s: Stream[B]): Boolean = !(this.zipAll(s).takeWhile { 
+    case (_, Some(b)) => true
+    case _ => false
+  } exists { 
+    case (Some(a), Some(b)) if a != b => true
+    case (None, Some(_)) => true
+    case _ => false
+  })
+
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
