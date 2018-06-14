@@ -30,13 +30,28 @@ object RNG {
       (f(a), rng2)
     }
 
-  def positiveInt(rng: RNG): (Int, RNG) = (map(int) { a => if (a != Int.MinValue) a.abs else Int.MaxValue })(rng)
+  def positiveInt(rng: RNG): (Int, RNG) = { 
+    val (a, rng2) = rng.nextInt
+    if (a == 0 || a == Int.MinValue) positiveInt(rng2)
+    else (a.abs, rng2)
+  }
 
-  def nonNegativeInt(rng: RNG): (Int, RNG) = ???
+  def nonNegativeInt(rng: RNG): (Int, RNG) = { 
+    val (a, rng2) = rng.nextInt
+    if (a == Int.MinValue) (Int.MaxValue, rng2)
+    else (a.abs, rng2)
+  }
 
-  def double(rng: RNG): (Double, RNG) = ???
+  def double(rng: RNG): (Double, RNG) = { 
+    val (a, rng2) = rng.nextInt
+    (a.toDouble/Int.MaxValue, rng2)
+  }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = ???
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val (i, rng2) = int(rng)
+    val (d, rng3) = double(rng2)
+    (i -> d, rng3)
+  }
 
   def doubleInt(rng: RNG): ((Double,Int), RNG) = ???
 
