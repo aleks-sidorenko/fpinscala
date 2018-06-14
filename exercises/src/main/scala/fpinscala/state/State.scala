@@ -30,6 +30,8 @@ object RNG {
       (f(a), rng2)
     }
 
+  def positiveInt(rng: RNG): (Int, RNG) = (map(int) { a => if (a != Int.MinValue) a.abs else Int.MaxValue })(rng)
+
   def nonNegativeInt(rng: RNG): (Int, RNG) = ???
 
   def double(rng: RNG): (Double, RNG) = ???
