@@ -53,9 +53,16 @@ object RNG {
     (i -> d, rng3)
   }
 
-  def doubleInt(rng: RNG): ((Double,Int), RNG) = ???
+  def doubleInt(rng: RNG): ((Double,Int), RNG) = intDouble(rng) match {
+    case ((i, d), nrg2) => ((d -> i), nrg2)
+  }
 
-  def double3(rng: RNG): ((Double,Double,Double), RNG) = ???
+  def double3(rng: RNG): ((Double,Double,Double), RNG) = {
+    val (d1, rng1) = double(rng)
+    val (d2, rng2) = double(rng1)
+    val (d3, rng3) = double(rng2)
+    (d1, d2, d3) -> rng3
+  }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
 
