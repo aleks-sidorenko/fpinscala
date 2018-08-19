@@ -65,14 +65,7 @@ object RNG {
   }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
-    def loop(n: Int, r: RNG, l: List[Int]): (List[Int], RNG) = {
-      if (n == 0) (l, r)
-      else {
-        val (i, r2) = int(r)
-        loop(n - 1, r2, i :: l)
-      }
-    }
-    loop(count, rng, Nil)
+    sequence(List.fill(count)(int))(rng)
   }
     
     
